@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Contratistas - LIATER</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .menu-container {
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal input, .modal select {
+            display: block;
+            width: 90%;
+            margin: 10px auto;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .modal button {
+            width: 90%;
+            margin-top: 10px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            display: none;
+        }
+
+        .close-btn {
+            background-color: red;
+        }
+
+        .btn-volver {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 150px;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        .btn-volver:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="content">
+        <h1>Gestión de Contratistas - LIATER</h1>
+
+        <div class="menu-container">
+            <button onclick="openModal('modalAgregar')">Agregar Contratista</button>
+            <button onclick="actualizarContratista()">Actualizar Contratista</button>
+        </div>
+
+        <input type="text" id="buscador" placeholder="Buscar contratista por nombre">
+        <button onclick="buscarContratista()">Buscar</button>
+
+        <div id="resultadoBusqueda" class="result"></div>
+    </div>
+
+    <!-- Modal para agregar contratista -->
+    <div id="modalAgregar" class="modal">
+        <h2>Agregar Contratista</h2>
+        <input type="number" id="idAgregar" placeholder="ID">
+        <input type="text" id="nombreAgregar" placeholder="Nombre">
+        <input type="text" id="carreraAgregar" placeholder="Carrera">
+        <input type="text" id="servicioAgregar" placeholder="Servicio">
+        <input type="number" step="0.01" id="tarifaHoraAgregar" placeholder="Tarifa por hora">
+        <input type="date" id="fechaInicioAgregar">
+        <input type="date" id="fechaFinAgregar">
+        <button onclick="agregarContratista()">Guardar</button>
+        <button class="close-btn" onclick="closeModal('modalAgregar')">Cerrar</button>
+    </div>
+
+    <button class="btn-volver" onclick="window.location.href='/'">Volver</button>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function agregarContratista() {
+            const contratista = {
+                id: parseInt(document.getElementById("idAgregar").value),
+                nombre: document.getElementById("nombreAgregar").value,
+                carrera: document.getElementById("carreraAgregar").value,
+                servicio: document.getElementById("servicioAgregar").value,
+                tarifa_hora: parseFloat(document.getElementById("tarifaHoraAgregar").value),
+                fecha_inicio: document.getElementById("fechaInicioAgregar").value,
+                fecha_fin: document.getElementById("fechaFinAgregar").value
+            };
+
+            fetch('/api/contratistas/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(contratista)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Contratista agregado correctamente");
+                closeModal('modalAgregar');
+                limpiarCampos();  // Limpia los campos después de agregar
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        function actualizarContratista() {
+            let id = prompt("Ingrese el ID del contratista a actualizar:");
+            let nombre = prompt("Nuevo nombre:");
+            let carrera = prompt("Nueva carrera:");
+            let servicio = prompt("Nuevo servicio:");
+            let tarifa_hora = prompt("Nueva tarifa por hora:");
+            let fecha_inicio = prompt("Nueva fecha de inicio:");
+            let fecha_fin = prompt("Nueva fecha de fin:");
+
+            const contratistaActualizado = { nombre, carrera, servicio, tarifa_hora, fecha_inicio, fecha_fin };
+
+            fetch(`/api/contratistas/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(contratistaActualizado)
+            })
+            .then(response => response.json())
+            .then(data => alert("Contratista actualizado correctamente"))
+            .catch(error => console.error("Error:", error));
+        }
+
+        function buscarContratista() {
+            let nombre = document.getElementById("buscador").value;
+
+            fetch(`/api/contratistas?nombre=${encodeURIComponent(nombre)}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("resultadoBusqueda").innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => console.error("Error:", error));
+        }
+
+        function limpiarCampos() {
+            document.querySelectorAll("#modalAgregar input").forEach(input => input.value = "");
+        }
+    </script>
+
+</body>
+</html>

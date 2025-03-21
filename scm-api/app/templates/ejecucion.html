@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejecución</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* Estilos para el diseño general */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Contenido principal para ocupar el espacio disponible */
+        .content {
+            flex: 1;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Estilos para el contenedor del menú */
+        .menu-container {
+            margin: 20px 0;
+        }
+
+        /* Estilo del menú desplegable */
+        #menu {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        #menu:hover {
+            background-color: #f0f8ff;
+        }
+
+        /* Botón de volver fijo en la parte inferior */
+        .btn-volver {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-volver:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Ejecución - Gestión de Materiales, Contratistas y Proyectos</h1>
+
+        <!-- Contenedor del menú -->
+        <div class="menu-container">
+            <select id="menu">
+                <option value="">Selecciona una opción</option>
+                <!-- Enlazamos la opción de "Proyecto LIATER" con la ruta "/proyecto_liater" -->
+                <option value="/proyecto_liater">Proyecto LIATER</option>
+                <option value="/proyectos_extension">Proyecto Extensión</option>
+                <option value="/materials">Materiales</option>
+                <option value="/contratistas">Contratistas</option>
+            </select>
+        </div>
+
+        <ul id="materials-list"></ul>
+    </div>
+
+    <!-- Botón para volver (fijo en la parte inferior) -->
+    <button class="btn-volver" onclick="window.location.href='/'">Volver</button>
+
+    <script>
+        // Manejar la navegación cuando se seleccione una opción
+        document.getElementById('menu').addEventListener('change', function() {
+            if (this.value) {
+                window.location.href = this.value;
+            }
+        });
+
+        // Cargar la lista de materiales
+        fetch('/materials')
+            .then(response => response.json())
+            .then(data => {
+                const list = document.getElementById('materials-list');
+                data.forEach(material => {
+                    const li = document.createElement('li');
+                    li.textContent = material.nombre;
+                    list.appendChild(li);
+                });
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+/* Estilos Generales */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-top: 20px;
+    color: #007bff;
+}
+
+/* Contenedor principal */
+.container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    width: 80%;
+    max-width: 800px;
+}
+
+/* Botones Generales */
+button {
+    font-size: 1rem;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin: 10px;
+    width: 80%;
+    max-width: 250px;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+button:focus {
+    outline: none;
+}
+
+/* Botón Principal */
+button.main-btn {
+    background-color: #0069d9;
+    color: white;
+}
+
+button.main-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Botón Volver */
+button.back-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+button.back-btn:hover {
+    background-color: #c82333;
+}
+
+/* Botón de Menú */
+button.menu-btn {
+    background-color: #0069d9;
+    color: white;
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+button.menu-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Submenú */
+.submenu {
+    display: none;
+    margin-top: 20px;
+}
+
+.submenu button {
+    background-color: #28a745;
+    color: white;
+    font-size: 1rem;
+    padding: 12px 25px;
+    border-radius: 5px;
+}
+
+.submenu button:hover {
+    background-color: #218838;
+}
+
+/* Estilo para la lista de estudiantes */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+    font-size: 1.1rem;
+    color: #555;
+}
+
+li {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos del contenedor de botones de acción */
+.action-buttons {
+    margin-top: 30px;
+}

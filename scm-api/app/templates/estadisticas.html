@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Estudiantes</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* Estilos mejorados para el scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-button-container">
+            <button class="back-button" onclick="window.location.href='/'">Volver</button>
+        </div>
+
+        <h1>Estadísticas - Gestión de Estudiantes</h1>
+
+        <label for="action-select">Selecciona una acción:</label>
+        <select id="action-select" onchange="toggleForms()">
+            <option value="add">Agregar Estudiante</option>
+            <option value="update">Actualizar Estudiante</option>
+            <option value="delete">Eliminar Estudiante</option>
+            <option value="search">Buscar Estudiante</option>
+        </select>
+
+        <div id="add-form">
+            <h2>Agregar Estudiante</h2>
+            <form id="student-form">
+                <input type="number" id="id" placeholder="ID" required>
+                <input type="text" id="nombre" placeholder="Nombre" required>
+                <input type="number" id="edad" placeholder="Edad" required>
+                <input type="text" id="curso" placeholder="Curso" required>
+                <input type="text" id="carrera" placeholder="Carrera" required>
+                <input type="date" id="fecha_inicio" required>
+                <input type="date" id="fecha_fin" required>
+                <button type="submit">Agregar</button>
+            </form>
+        </div>
+
+        <div id="update-form" style="display:none;">
+            <h2>Actualizar Estudiante</h2>
+            <form id="update-student-form">
+                <input type="number" id="update-id" placeholder="ID del estudiante" required>
+                <input type="text" id="update-nombre" placeholder="Nuevo Nombre">
+                <input type="number" id="update-edad" placeholder="Nueva Edad">
+                <input type="text" id="update-curso" placeholder="Nuevo Curso">
+                <input type="text" id="update-carrera" placeholder="Nueva Carrera">
+                <input type="date" id="update-fecha_inicio">
+                <input type="date" id="update-fecha_fin">
+                <button type="submit">Actualizar</button>
+            </form>
+        </div>
+
+        <div id="delete-form" style="display:none;">
+            <h2>Eliminar Estudiante</h2>
+            <input type="number" id="delete-id" placeholder="ID del estudiante">
+            <button onclick="eliminarEstudiante()">Eliminar</button>
+        </div>
+
+        <div id="search-form" style="display:none;">
+            <h2>Buscar Estudiante</h2>
+            <input type="number" id="search-id" placeholder="ID del estudiante">
+            <button onclick="buscarEstudiante()">Buscar</button>
+            <p id="search-result"></p>
+        </div>
+
+        <ul id="items-list"></ul>
+
+        <script>
+            function toggleForms() {
+                document.getElementById('add-form').style.display = 'none';
+                document.getElementById('update-form').style.display = 'none';
+                document.getElementById('delete-form').style.display = 'none';
+                document.getElementById('search-form').style.display = 'none';
+        
+                const selectedAction = document.getElementById('action-select').value;
+                document.getElementById(`${selectedAction}-form`).style.display = 'block';
+            }
+        
+            function fetchData() {
+                fetch(`/api/estudiantes/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const list = document.getElementById('items-list');
+                        list.innerHTML = '';
+                        data.forEach(student => {
+                            const li = document.createElement('li');
+                            li.textContent = `${student.id}: ${student.nombre} - ${student.carrera} - ${student.curso} (${student.fecha_inicio} - ${student.fecha_fin})`;
+                            list.appendChild(li);
+                        });
+                    })
+                    .catch(error => console.error('Error al obtener los estudiantes:', error));
+            }
+        
+            function buscarEstudiante() {
+                const id = document.getElementById('search-id').value;
+        
+                if (!id) {
+                    alert("Por favor ingrese un ID válido.");
+                    return;
+                }
+        
+                fetch(`/api/estudiantes/${id}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Estudiante no encontrado");
+                        }
+                        return response.json();
+                    })
+                    .then(student => {
+                        document.getElementById('search-result').innerHTML = `
+                            <strong>ID:</strong> ${student.id} <br>
+                            <strong>Nombre:</strong> ${student.nombre} <br>
+                            <strong>Edad:</strong> ${student.edad} <br>
+                            <strong>Curso:</strong> ${student.curso} <br>
+                            <strong>Carrera:</strong> ${student.carrera} <br>
+                            <strong>Fecha de Inicio:</strong> ${student.fecha_inicio} <br>
+                            <strong>Fecha de Fin:</strong> ${student.fecha_fin}
+                        `;
+                    })
+                    .catch(error => {
+                        document.getElementById('search-result').innerHTML = `<span style="color:red;">${error.message}</span>`;
+                    });
+            }
+        
+            document.getElementById('student-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+        
+                const estudiante = {
+                    id: parseInt(document.getElementById('id').value),
+                    nombre: document.getElementById('nombre').value,
+                    edad: parseInt(document.getElementById('edad').value),
+                    curso: document.getElementById('curso').value,
+                    carrera: document.getElementById('carrera').value,
+                    fecha_inicio: document.getElementById('fecha_inicio').value,
+                    fecha_fin: document.getElementById('fecha_fin').value
+                };
+        
+                fetch('/api/estudiantes/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(estudiante)
+                })
+                .then(response => response.json())
+                .then(() => {
+                    alert('Estudiante agregado correctamente');
+                    fetchData();
+                    document.getElementById('student-form').reset();
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        
+            fetchData();
+        </script>        
+    </div>
+</body>
+</html>
+
+

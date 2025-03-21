@@ -1,0 +1,67 @@
+function actualizarMaterial() {
+    let id = prompt("Ingrese el ID del material a actualizar:");
+
+    if (!id) {
+        alert("Debe ingresar un ID válido.");
+        return;
+    }
+
+    fetch(`/api/materiales/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Material no encontrado");
+            }
+            return response.json();
+        })
+        .then(material => {
+            // Rellenar los campos existentes del modal de agregar con los datos actuales
+            document.getElementById("idAgregar").value = material.id;
+            document.getElementById("nombreAgregar").value = material.nombre;
+            document.getElementById("cantidadAgregar").value = material.cantidad;
+            document.getElementById("descripcionAgregar").value = material.descripcion;
+            document.getElementById("precioAgregar").value = material.precio_unitario;
+
+            // Abrir el modal de agregar, pero en modo actualización
+            openModal('modalAgregar');
+
+            // Cambiar la función del botón de guardar
+            document.querySelector("#modalAgregar button").setAttribute("onclick", `guardarActualizacion(${id})`);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("No se encontró el material con ese ID.");
+        });
+}
+
+function guardarActualizacion(id) {
+    const nombre = document.getElementById("nombreAgregar").value;
+    const cantidad = parseInt(document.getElementById("cantidadAgregar").value);
+    const descripcion = document.getElementById("descripcionAgregar").value;
+    const precio_unitario = parseFloat(document.getElementById("precioAgregar").value);
+    const total = cantidad * precio_unitario;
+
+    const materialActualizado = { nombre, cantidad, descripcion, precio_unitario, total };
+
+    fetch(`/api/materiales/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(materialActualizado)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al actualizar material');
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert("Material actualizado correctamente");
+        closeModal('modalAgregar');
+
+        // Restaurar el botón de guardar para agregar
+        document.querySelector("#modalAgregar button").setAttribute("onclick", "agregarMaterial()");
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Hubo un problema al actualizar el material.");
+    });
+}
