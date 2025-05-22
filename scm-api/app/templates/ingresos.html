@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ingresos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 80%;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 10px;
+            text-align: center;
+        }
+        input {
+            width: 90%;
+            padding: 5px;
+        }
+        .submit-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 25px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Formulario de Ingresos</h1>
+    <form method="post">
+        <table>
+            <tr>
+                <th>Tipo de Acuerdo</th>
+                <th>¿Conoce el monto?</th>
+                <th>Aporte entidad (monto)</th>
+                <th>Contrapartida</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="tipo_acuerdo"></td>
+                <td>
+                    <select name="conoce_monto">
+                        <option value="Sí">Sí</option>
+                        <option value="No">No</option>
+                    </select>
+                </td>
+                <td><input type="number" name="aporte_entidad"></td>
+                <td><input type="number" name="contrapartida" value="0"></td>
+            </tr>
+        </table>
+        <button type="submit" class="submit-btn">Guardar</button>
+    </form>
+</body>
+</html>

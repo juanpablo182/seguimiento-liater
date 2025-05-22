@@ -1,3 +1,58 @@
+<!-- <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto LIATER</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Registro Detallado - Proyecto LIATER</h1>
+
+        <select id="dropdown" onchange="redirigirPagina()">
+            <option value="">Seleccione una sección</option>
+            <option value="/api/infobasica/vista">0. Información básica</option>
+            <option value="/ingresos">1. Ingresos</option>
+            <option value="/egresos">2. Egresos</option>
+            <option value="/adquisicion_servicios">3. Adquisición de servicios</option>
+            <option value="/impuestos">4. Impuestos, contribuciones y multas</option>
+            <option value="/transferencia_extension">5. Transferencia de extensión-específica</option>
+        </select>
+    </div>
+
+    <script>
+        function redirigirPagina() {
+            const seleccion = document.getElementById('dropdown').value;
+            if (seleccion) {
+                window.location.href = new URL(seleccion, window.location.origin).href;
+            }
+        }
+    </script>
+</body>
+</html> -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,192 +75,36 @@
             padding: 20px;
         }
 
-        .menu-container {
-            margin: 20px 0;
-        }
-
-        button {
+        select {
             padding: 10px;
-            margin: 10px;
             font-size: 16px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-            z-index: 1000;
-        }
-
-        .modal input, .modal select {
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .modal button {
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .close-btn {
-            background-color: red;
+            margin: 10px auto;
+            display: block;
         }
     </style>
 </head>
 <body>
-
     <div class="content">
-        <h1>Gestión del Proyecto LIATER</h1>
+        <h1>Registro Detallado - Proyecto LIATER</h1>
 
-        <div class="menu-container">
-            <button onclick="abrirModalAgregar()">Agregar Proyecto LIATER</button>
-            <button onclick="actualizarProyecto()">Actualizar Proyecto LIATER</button>
-        </div>
-
-        <input type="text" id="buscadorID" placeholder="Buscar proyecto por ID">
-        <button onclick="buscarProyectoPorID()">Buscar</button>
-
-        <div id="resultadoBusqueda" class="result"></div>
-    </div>
-
-    <!-- Modal para agregar/actualizar proyecto -->
-    <div id="modalAgregar" class="modal">
-        <h2 id="modalTitulo">Agregar Proyecto</h2>
-        <input type="hidden" id="proyectoID">
-        <table>
-            <tr><td>Código</td><td><input type="text" id="codigoAgregar"></td></tr>
-            <tr><td>Nombre</td><td><input type="text" id="nombreAgregar"></td></tr>
-            <tr><td>Descripción</td><td><input type="text" id="descripcionAgregar"></td></tr>
-            <tr><td>Ingreso</td><td><input type="number" id="ingresoAgregar"></td></tr>
-            <tr><td>Egreso</td><td><input type="number" id="egresoAgregar"></td></tr>
-            <tr><td>Presupuesto</td><td><input type="number" id="presupuestoAgregar"></td></tr>
-            <tr><td>Estado</td><td>
-                <select id="estadoAgregar">
-                    <option value="Activo">Activo</option>
-                    <option value="Inactivo">Inactivo</option>
-                </select>
-            </td></tr>
-            <tr><td>Fecha Inicio</td><td><input type="date" id="fechaInicioAgregar"></td></tr>
-            <tr><td>Fecha Fin</td><td><input type="date" id="fechaFinAgregar"></td></tr>
-        </table>
-        <button onclick="guardarProyecto()">Guardar</button>
-        <button class="close-btn" onclick="closeModal('modalAgregar')">Cerrar</button>
+        <select id="dropdown" onchange="redirigirPagina()">
+            <option value="">Seleccione una sección</option>
+            <option value="/api/projects/vista">0. Información básica</option> <!-- CORREGIDO -->
+            <option value="/ingresos">1. Ingresos</option>
+            <option value="/egresos">2. Egresos</option>
+            <option value="/adquisicion_servicios">3. Adquisición de servicios</option>
+            <option value="/impuestos">4. Impuestos, contribuciones y multas</option>
+            <option value="/transferencia_extension">5. Transferencia de extensión-específica</option>
+        </select>
     </div>
 
     <script>
-        function openModal(id) {
-            document.getElementById(id).style.display = 'block';
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
-        function abrirModalAgregar() {
-            document.getElementById("modalTitulo").textContent = "Agregar Proyecto";
-            document.getElementById("proyectoID").value = ""; 
-            document.querySelectorAll("#modalAgregar input, #modalAgregar select").forEach(input => input.value = "");
-            openModal("modalAgregar");
-        }
-
-        function buscarProyectoPorID() {
-            let id = document.getElementById("buscadorID").value;
-
-            fetch(`/api/proyectos/${id}`)
-            .then(response => {
-                if (!response.ok) throw new Error("Proyecto no encontrado");
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById("resultadoBusqueda").innerHTML = `
-                    <p><strong>Código:</strong> ${data.codigo}</p>
-                    <p><strong>Nombre:</strong> ${data.nombre}</p>
-                    <p><strong>Descripción:</strong> ${data.descripcion}</p>
-                    <p><strong>Ingreso:</strong> ${data.ingreso}</p>
-                    <p><strong>Egreso:</strong> ${data.egreso}</p>
-                    <p><strong>Presupuesto:</strong> ${data.presupuesto}</p>
-                    <p><strong>Estado:</strong> ${data.estado}</p>
-                    <p><strong>Fecha Inicio:</strong> ${data.fecha_inicio}</p>
-                    <p><strong>Fecha Fin:</strong> ${data.fecha_fin}</p>
-                `;
-            })
-            .catch(error => alert(error.message));
-        }
-
-        function guardarProyecto() {
-            let id = document.getElementById("proyectoID").value;
-            let proyecto = {
-                codigo: document.getElementById("codigoAgregar").value,
-                nombre: document.getElementById("nombreAgregar").value,
-                descripcion: document.getElementById("descripcionAgregar").value,
-                ingreso: parseFloat(document.getElementById("ingresoAgregar").value) || 0,
-                egreso: parseFloat(document.getElementById("egresoAgregar").value) || 0,
-                presupuesto: parseFloat(document.getElementById("presupuestoAgregar").value) || 0,
-                estado: document.getElementById("estadoAgregar").value,
-                fecha_inicio: document.getElementById("fechaInicioAgregar").value,
-                fecha_fin: document.getElementById("fechaFinAgregar").value
-            };
-
-            let url = id ? `/api/proyectos/${id}` : "/api/proyectos";
-            let method = id ? "PUT" : "POST";
-
-            fetch(url, {
-                method: method,
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(proyecto)
-            })
-            .then(response => {
-                if (!response.ok) throw new Error("Error al guardar el proyecto");
-                return response.json();
-            })
-            .then(() => {
-                alert("Proyecto guardado exitosamente");
-                closeModal("modalAgregar");
-            })
-            .catch(error => alert(error.message));
-        }
-
-        function actualizarProyecto() {
-            let id = prompt("Ingrese el ID del proyecto a actualizar:");
-            if (!id) return;
-
-            fetch(`/api/proyectos/${id}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("modalTitulo").textContent = "Actualizar Proyecto";
-                document.getElementById("proyectoID").value = id;
-                Object.keys(data).forEach(key => {
-                    if (document.getElementById(key + "Agregar")) {
-                        document.getElementById(key + "Agregar").value = data[key];
-                    }
-                });
-                openModal("modalAgregar");
-            })
-            .catch(error => alert(error.message));
+        function redirigirPagina() {
+            const seleccion = document.getElementById('dropdown').value;
+            if (seleccion) {
+                window.location.href = new URL(seleccion, window.location.origin).href;
+            }
         }
     </script>
-
 </body>
 </html>

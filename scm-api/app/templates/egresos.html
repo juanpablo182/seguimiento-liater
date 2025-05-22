@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Egresos - Proyecto LIATER</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+        }
+
+        .dropdown-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        select {
+            padding: 0.5rem 1rem;
+            font-size: 16px;
+            margin: 10px 0;
+            width: 300px;
+        }
+
+        .info-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            width: 60%;
+            background-color: #f9f9f9;
+        }
+
+        .go-button {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            font-size: 16px;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Registro de Egresos</h1>
+
+    <div class="dropdown-container">
+        <label for="egresos-select">Seleccione el tipo de egreso:</label>
+        <select id="egresos-select" onchange="mostrarSeleccion()">
+            <option value="">-- Seleccionar --</option>
+            <option value="personal">1. Gastos de personal</option>
+            <option value="servicios_prof">2. Servicios técnicos profesionales</option>
+            <option value="servicios_no_prof">3. Servicios técnicos no profesionales</option>
+            <option value="estimulos">4. Estímulos a estudiantes auxiliares</option>
+        </select>
+
+        <div id="info" class="info-box" style="display: none;">
+            <p id="descripcion"></p>
+        </div>
+
+        <!-- Botón para redirigir si se desea -->
+        <button id="go-button" class="go-button" onclick="redirigir()">Ir a sección</button>
+    </div>
+
+    <script>
+        function mostrarSeleccion() {
+            const seleccion = document.getElementById("egresos-select").value;
+            const infoBox = document.getElementById("info");
+            const descripcion = document.getElementById("descripcion");
+            const goButton = document.getElementById("go-button");
+
+            let texto = "";
+
+            switch (seleccion) {
+                case "personal":
+                    texto = "Incluye todos los pagos relacionados con el personal contratado para el proyecto.";
+                    break;
+                case "servicios_prof":
+                    texto = "Servicios técnicos prestados por profesionales especializados.";
+                    break;
+                case "servicios_no_prof":
+                    texto = "Servicios técnicos prestados por personas sin título profesional.";
+                    break;
+                case "estimulos":
+                    texto = "Pagos o incentivos a estudiantes auxiliares que colaboran en el proyecto.";
+                    break;
+                default:
+                    texto = "";
+            }
+
+            if (texto) {
+                descripcion.textContent = texto;
+                infoBox.style.display = "block";
+                goButton.style.display = "inline-block";  // Muestra el botón solo si hay opción válida
+            } else {
+                infoBox.style.display = "none";
+                goButton.style.display = "none";
+            }
+        }
+
+        function redirigir() {
+            const seleccion = document.getElementById("egresos-select").value;
+
+            // Define las rutas internas según tu estructura
+            switch (seleccion) {
+                case "personal":
+                    window.location.href = "/api/egresos_gp/vista";
+                    break;
+                case "servicios_prof":
+                    alert("Ruta de 'Servicios técnicos profesionales' aún no implementada.");
+                    break;
+                case "servicios_no_prof":
+                    alert("Ruta de 'Servicios técnicos no profesionales' aún no implementada.");
+                    break;
+                case "estimulos":
+                    alert("Ruta de 'Estímulos a estudiantes auxiliares' aún no implementada.");
+                    break;
+                default:
+                    alert("Por favor, selecciona una opción válida.");
+            }
+        }
+    </script>
+
+</body>
+</html>
